@@ -1,61 +1,75 @@
 class Variable :
     def __init__(self,v):
         self.v=v
-    def FV(self):
+    def fv(self):
         return self.v
-    def BV(self):
+    def bv(self):
         return list()
+    def substitution(self,x,s):
+        if self.v==x.v:
+            return s
+        return self
 class Constant :
     def __init__(self,c):
         self.c=c
-    def FV(self):
+    def fv(self):
         return list()
-    def BV(self):
+    def bv(self):
         return list()
+    def substitution(self,x,s):
+
+        return self
 class Combination :
     def __init__(self,s,t):
         self.s=s
         self.t=t
-    def FV(self):
+    def fv(self):
         temp=[]
-        if isinstance(self.s.FV(), String):
-            temp.append(self.s.FV())
+        if isinstance(self.s.fv(), String):
+            temp.append(self.s.fv())
         else:
-            temp=temp+self.s.FV()
-        if isinstance(self.t.FV(), String):
-            temp.append(self.t.FV())
+            temp=temp+self.s.fv()
+        if isinstance(self.t.fv(), String):
+            temp.append(self.t.fv())
         else:
-            temp=temp+self.s.FV()
+            temp=temp+self.s.fv()
 
         return temp
-    def BV(self):
+    def bv(self):
         temp=[]
-        if isinstance(self.s.BV(), String):
-            temp.append(self.s.BV())
+        if isinstance(self.s.bv(), String):
+            temp.append(self.s.bv())
         else:
-            temp=temp+self.s.BV()
-        if isinstance(self.t.BV(), String):
-            temp.append(self.t.BV())
+            temp=temp+self.s.bv()
+        if isinstance(self.t.bv(), String):
+            temp.append(self.t.bv())
         else:
-            temp=temp+self.s.BV()
+            temp=temp+self.s.bv()
 
         return temp
 
-class Abstractions :
+    def substitution(self, x, s):
+
+        return Combination(self.s.substitution(x,s),self.t.substitution(x,s))
+class Abstraction :
     def __init__(self,x,s):
         self.x=x
         self.s=s
-    def FV(self):
+    def fv(self):
         temp=[]
-        if isinstance(self.s.FV(),String):
-            temp.append(self.s.FV())
+        if isinstance(self.s.fv(),String):
+            temp.append(self.s.fv())
         else:
-            temp=self.s.FV()
+            temp=self.s.fv()
         temp.remove(self.x)
         return  temp
 
-    def BV(self):
+    def bv(self):
         temp=[]
-        temp=temp+self.s.BV()
+        temp=temp+self.s.bv()
         temp.append(self.x)
         return temp
+    def substitution(self, x, s):
+        if x.v==self.x:
+            return self
+        return Abstraction(self.x,self.s.substitution(x,s))
