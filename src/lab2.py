@@ -13,8 +13,10 @@ class Variable :
         return list()
 
     def substitution(self,x,s):
-        if self.v==x.v:
+        if self.v==x:
             return s
+        return self
+    def beta(self):
         return self
 
 class Constant :
@@ -29,6 +31,8 @@ class Constant :
         return list()
 
     def substitution(self,x,s):
+        return self
+    def beta(self):
         return self
 
 class Combination :
@@ -56,8 +60,13 @@ class Combination :
         return Combination(self.s.substitution(x,s),self.t.substitution(x,s))
 
     def beta(self):
-        return self.s.s.subtitution(self.s.x,t)
-
+        if isinstance(self.s, Abstraction):
+            return self.s.s.substitution(self.s.x,self.t)
+        if isinstance(self.s, Combination):
+            return Combination(self.s.beta(),self.t)
+        if isinstance(self.t, Abstraction) or isinstance(self.t, Combination):
+            return Combination(self.s,self.t.beta())
+        return self
     def eta(self):
         if isinstance(self.s,Abstraction) and isinstance(self.s.s, Combination):
             if self.s.x==self.s.t:
@@ -85,7 +94,7 @@ class Abstraction :
         return temp
 
     def substitution(self, x, s):
-        if x.v==self.x:
+        if x==self.x:
             return self
         return Abstraction(self.x,self.s.substitution(x,s))
 
@@ -93,6 +102,8 @@ class Abstraction :
         if self.x==y:
             return self
         return Abstraction(y,self.s.substitution(x,y))
+    def beta(self):
+        return Abstraction(self.x, self.s.beta())
 
 true=Abstraction('x',Abstraction('y',Variable('x')))
 false=Abstraction('x',Abstraction('y',Variable('y')))
@@ -107,7 +118,7 @@ def getNumber(n):
     return Abstraction('f',Abstraction('x',number(n)))
 
 def suc(n):
-    return Abstraction('f', Abstraction('x', Combination(Variable('f'), Combination(Combination(n, Variable('f')), Variable('x')))))
+    return Abstraction('f', Abstraction('x', Combination(Variable('f'), Combination(Combination(n, Variable('f')),Variable('x')))))
 def isZero(n):
     return Combination(Combination(n,Abstraction('x',false)),true)
 
@@ -120,17 +131,20 @@ def mult(m,n):
 def pred(n):
     return Abstraction('f', Abstraction('x', Combination(Combination(Combination(n, Abstraction('g', Abstraction('h', Combination(Variable('h'), Combination(Variable('g'), Variable('f')))))), Abstraction('u', Variable('x'))), Abstraction('u', Variable('u')))))
 
+def factorial(n):
 
+    if str(betaConversation(isZero(n)))==str(true):
 
+        return getNumber(1)
+    return mult(n,factorial(pred(n)))
 
 def betaConversation(n):
     pre=n
     while(1):
         n=pre.beta()
-        if n==pre:
-            return test
+        if str(n)==str(pre):
+            return n
         pre=n
-
 
 
 
