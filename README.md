@@ -1,26 +1,26 @@
-**title:** Different approach for algorithms and data structure implementation
+**title:** Basic Model of Computational
 
 **group name:** LAW
 
 **group number:** Wu Zhengbo , Lu Ziheng
 
-**laboratory work number:**  1
+**laboratory work number:**  2
 
-**variant description:** Dictionary based on binary-tree
+**variant description:**  Lambda-calculus
 
-**contribution summary for each group member :** Wu Zhengbo  design and develop a immutable Dictionary. Lu Ziheng design and develop an mutable Dictionary.
+**contribution summary for each group member :** Wu Zhengbo  design and develop four categories. Lu Ziheng design and develop Calculation function.
 
 **synopsis:**
 
 ​	We have implemented the following functions：
 
-​	1.Dictionary's getting () and setting ()
+​	1.four categories's FV() ,BV(),substitution(),alpha(),beta(),eta().
 
-​	2.Binary tree's add(),size(),fromlist(),tolist(),find(),filter(),map(),reduce(),remove(),iterator(),conact().
+​	2.getNumber(),suc(),isZero(),plus(),mult(),pred(),factorial().
 
-**work demonstration:** python imdict test.py -v. python mdict_test.py -v
+**work demonstration:** python test.py 
 
-**conclusion:** We implement the dictionary based on binary tree through python. In this experiment, we installed Python and git environment. Familiar with the basic syntax of Python.
+**conclusion:** We implement basic model of computational. In this experiment, We learned about Lambda-calculus and verified them with Python.
 
 ​	
 
