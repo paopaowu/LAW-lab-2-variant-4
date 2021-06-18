@@ -1,28 +1,39 @@
 class Variable :
+
     def __init__(self,v):
         self.v=v
+
     def fv(self):
         return self.v
+
     def bv(self):
         return list()
+
     def substitution(self,x,s):
         if self.v==x.v:
             return s
         return self
+
 class Constant :
+
     def __init__(self,c):
         self.c=c
+
     def fv(self):
         return list()
+
     def bv(self):
         return list()
-    def substitution(self,x,s):
 
+    def substitution(self,x,s):
         return self
+
 class Combination :
+
     def __init__(self,s,t):
         self.s=s
         self.t=t
+
     def fv(self):
         temp=[]
         if isinstance(self.s.fv(), String):
@@ -33,8 +44,8 @@ class Combination :
             temp.append(self.t.fv())
         else:
             temp=temp+self.s.fv()
-
         return temp
+
     def bv(self):
         temp=[]
         if isinstance(self.s.bv(), String):
@@ -45,24 +56,25 @@ class Combination :
             temp.append(self.t.bv())
         else:
             temp=temp+self.s.bv()
-
         return temp
 
     def substitution(self, x, s):
-
         return Combination(self.s.substitution(x,s),self.t.substitution(x,s))
 
     def beta(self):
         return self.s.s.subtitution(self.s.x,t)
+
     def eta(self):
         if isinstance(self.s,Abstraction) and isinstance(self.s.s, Combination):
             if self.s.x==self.s.t:
                 return Combination(self.s.s.s,self.t)
 
 class Abstraction :
+
     def __init__(self,x,s):
         self.x=x
         self.s=s
+
     def fv(self):
         temp=[]
         if isinstance(self.s.fv(),String):
@@ -77,6 +89,7 @@ class Abstraction :
         temp=temp+self.s.bv()
         temp.append(self.x)
         return temp
+
     def substitution(self, x, s):
         if x.v==self.x:
             return self
