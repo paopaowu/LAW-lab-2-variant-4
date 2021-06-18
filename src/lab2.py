@@ -140,7 +140,9 @@ def factorial(n):
 
 def betaConversation(n):
     pre=n
+    print("-------------------------")
     while(1):
+        print(n)
         n=pre.beta()
         if str(n)==str(pre):
             return n
