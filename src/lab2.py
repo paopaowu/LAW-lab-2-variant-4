@@ -51,6 +51,14 @@ class Combination :
     def substitution(self, x, s):
 
         return Combination(self.s.substitution(x,s),self.t.substitution(x,s))
+
+    def beta(self):
+        return self.s.s.subtitution(self.s.x,t)
+    def eta(self):
+        if isinstance(self.s,Abstraction) and isinstance(self.s.s, Combination):
+            if self.s.x==self.s.t:
+                return Combination(self.s.s.s,self.t)
+
 class Abstraction :
     def __init__(self,x,s):
         self.x=x
@@ -73,3 +81,8 @@ class Abstraction :
         if x.v==self.x:
             return self
         return Abstraction(self.x,self.s.substitution(x,s))
+
+    def alpha(self,y):
+        if self.x==y:
+            return self
+        return Abstraction(y,self.s.substitution(x,y))
