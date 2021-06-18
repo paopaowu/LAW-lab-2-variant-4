@@ -4,7 +4,7 @@ class Variable :
         self.v=v
 
     def fv(self):
-        return self.v
+        return list().append(self.v)
 
     def bv(self):
         return list()
@@ -36,26 +36,14 @@ class Combination :
 
     def fv(self):
         temp=[]
-        if isinstance(self.s.fv(), String):
-            temp.append(self.s.fv())
-        else:
-            temp=temp+self.s.fv()
-        if isinstance(self.t.fv(), String):
-            temp.append(self.t.fv())
-        else:
-            temp=temp+self.s.fv()
+        temp=temp+self.s.fv()
+        temp=temp+self.s.fv()
         return temp
 
     def bv(self):
         temp=[]
-        if isinstance(self.s.bv(), String):
-            temp.append(self.s.bv())
-        else:
-            temp=temp+self.s.bv()
-        if isinstance(self.t.bv(), String):
-            temp.append(self.t.bv())
-        else:
-            temp=temp+self.s.bv()
+        temp=temp+self.s.bv()
+        temp=temp+self.s.bv()
         return temp
 
     def substitution(self, x, s):
@@ -76,11 +64,8 @@ class Abstraction :
         self.s=s
 
     def fv(self):
-        temp=[]
-        if isinstance(self.s.fv(),String):
-            temp.append(self.s.fv())
-        else:
-            temp=self.s.fv()
+
+        temp=self.s.fv()
         temp.remove(self.x)
         return  temp
 
@@ -99,3 +84,43 @@ class Abstraction :
         if self.x==y:
             return self
         return Abstraction(y,self.s.substitution(x,y))
+
+true=Abstraction('x',Abstraction('y',Variable('x')))
+false=Abstraction('x',Abstraction('y',Variable('y')))
+E1_E2=Abstraction(f,Combination("E1","E2"))
+
+def number(n):
+    if n==0:
+        return Variable('x')
+    return Combination(Variable('f'),number(n-1))
+
+def getNumber(n):
+    return Abstraction('f',Abstraction('x',number(n)))
+
+def suc(n):
+    return Abstraction('f', Abstraction('x', Combination(Variable('f'), Combination(Combination(n, Variable('f')), Variable('x')))))
+def isZero(n):
+    return Combination(Combination(n,Abstraction('x',false)),true)
+
+def plus(m,n):
+    return Abstraction('f', Abstraction('x', Combination(Combination(m, Variable('f')),Combination(Combination(n, Variable('f')), Variable('x')))))
+
+def mult(m,n):
+    return Abstraction('f', Combination(m, Combination(n, Variable('f'))))
+
+def pred(n):
+    return Abstraction('f', Abstraction('x', Combination(Combination(Combination(n, Abstraction('g', Abstraction('h', Combination(Variable('h'), Combination(Variable('g'), Variable('f')))))), Abstraction('u', Variable('x'))), Abstraction('u', Variable('u')))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
