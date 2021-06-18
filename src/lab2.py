@@ -3,6 +3,9 @@ class Variable :
     def __init__(self,v):
         self.v=v
 
+    def __str__(self):
+        return self.v
+
     def fv(self):
         return list().append(self.v)
 
@@ -34,6 +37,9 @@ class Combination :
         self.s=s
         self.t=t
 
+    def __str__(self):
+        return "({} {})".format(self.s,self.t)
+
     def fv(self):
         temp=[]
         temp=temp+self.s.fv()
@@ -63,6 +69,9 @@ class Abstraction :
         self.x=x
         self.s=s
 
+    def __str__(self):
+        return "λ{}.{}".format(self.x,self.s)
+
     def fv(self):
 
         temp=self.s.fv()
@@ -87,7 +96,7 @@ class Abstraction :
 
 true=Abstraction('x',Abstraction('y',Variable('x')))
 false=Abstraction('x',Abstraction('y',Variable('y')))
-E1_E2=Abstraction(f,Combination("E1","E2"))
+E1_E2=Abstraction('f',Combination("E1","E2"))
 
 def number(n):
     if n==0:
@@ -114,8 +123,13 @@ def pred(n):
 
 
 
-
-
+def betaConversation(n):
+    pre=n
+    while(1):
+        n=pre.beta()
+        if n==pre:
+            return test
+        pre=n
 
 
 
